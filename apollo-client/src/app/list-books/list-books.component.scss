@@ -1,0 +1,13 @@
+.books-container {
+    flex-wrap: wrap;
+    display: flex;
+    justify-content: center;
+}
+
+.book-card {
+    max-width: 200px;
+}
+
+mat-card {
+    margin: 1em;
+}
