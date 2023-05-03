@@ -1,4 +1,8 @@
-<div *ngFor="let book of books" >
-    <h1>{{book.title}}</h1>
-    <p>{{book.author}}</p>
+<div class="container books-container">
+    <div *ngIf="loading">loading...</div>
+    <mat-card class="book-card" *ngFor="let book of books">
+        <img mat-card-image src={{book.cover_image}} />
+        <mat-card-title class="text-center">{{book.title}}</mat-card-title>
+    </mat-card>
 </div>
+    

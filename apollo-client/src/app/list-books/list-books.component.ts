@@ -10,6 +10,7 @@ import { Books } from '../models/books';
 })
 export class ListBooksComponent implements OnInit {
   books!: Book[];
+  loading!: boolean;
 
   constructor(private apollo: Apollo) { }
 
@@ -19,12 +20,13 @@ export class ListBooksComponent implements OnInit {
         query getBooks {
           books {
             title
+            cover_image
           }
         }
       `
-    }).valueChanges.subscribe(({ data }) => {
+    }).valueChanges.subscribe(({ data, loading }) => {
       this.books = data.books;
-      console.log(this.books);
+      this.loading = loading;
     })
   }
 }
