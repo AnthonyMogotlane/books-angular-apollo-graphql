@@ -13,8 +13,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 // Angular Material components
 import { MatToolbarModule } from '@angular/material/toolbar';
-
-
+import {MatCardModule} from '@angular/material/card';
 
 @NgModule({
   declarations: [
@@ -26,7 +25,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     ApolloModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    MatToolbarModule
+    MatToolbarModule,
+    MatCardModule
   ],
   providers: [
     {
