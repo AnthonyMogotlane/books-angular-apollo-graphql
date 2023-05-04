@@ -1,8 +1,11 @@
 <div class="container books-container">
     <div *ngIf="loading">loading...</div>
     <mat-card class="book-card" *ngFor="let book of books">
-        <img mat-card-image src={{book.cover_image}} />
-        <mat-card-title class="text-center">{{book.title}}</mat-card-title>
+        <img mat-card-image src={{book.coverImage}} />
+        <mat-card-title class="text-center">{{book.author}}</mat-card-title>
+        <mat-card-content>
+            <p>{{book.price}}</p>
+        </mat-card-content>
     </mat-card>
 </div>
-    
+<button (click)="addBook()" >Add</button>
