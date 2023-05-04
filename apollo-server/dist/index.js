@@ -1,53 +1,72 @@
 import { ApolloServer } from '@apollo/server';
 import { startStandaloneServer } from '@apollo/server/standalone';
-import axios from 'axios';
-// A schema is a collection of type definitions (hence "typeDefs") 
-// that together define the "shape" of queries that are executed against
-// your data.
-// Type defenitions that shape the queries
 const typeDefs = `#graphql
-  # Comments in GraphQL strings (such as this one) start with the hash (#) symbol.
-
-  # This "Book" type defines the queryable fields for every book in our data source.
   type Book {
-    id: Int
-    author_id: Int
+    id: ID
+    author: String
     title: String
-    cover_image: String
-    pages: Int
-    releaseDate: String
-    isbn: String
+    coverImage: String
+    price: String
   }
 
-  # The "Query" type is special: it lists all of the available queries that
-  # clients can execute, along with the return type for each. In this
-  # case, the "books" query returns an array of zero or more Books (defined above).
+  input BookInput {
+    author: String
+    title: String
+    coverImage: String
+    price: String
+  }
+
   type Query {
-    books: [Book]
+    books: [Book],
+    bookById(id: ID): Book
+  }
+
+  type Mutation {
+    addBook(book: BookInput): Book
   }
 `;
-// const res = await axios.get("https://my-json-server.typicode.com/dmitrijt9/book-api-mock/books");
-// const bookA = res.data;
-// Resolvers define how to fetch the types defined in your schema.
-// This resolver retrieves books from the "books" array above.
+const books = [
+    {
+        "id": 1,
+        "title": "The Awakening",
+        "author": "Kate Chopin",
+        "coverImage": "http://t1.gstatic.com/images?q=tbn:ANd9GcQvJJDi2mzwg9v_PlmKYL31gXIz0kvAObJak7DVFPcD_mJTIyec",
+        "price": "R150"
+    },
+    {
+        "id": 2,
+        "title": "City of Glass",
+        "author": "Paul Auster",
+        "coverImage": "http://t0.gstatic.com/images?q=tbn:ANd9GcRHFU_j93PPsbQGqoaZJnHH6-Emk_sIxG823SkoRTL0nvdEP41f",
+        "price": "R180"
+    },
+    {
+        "id": 3,
+        "title": "Anthony",
+        "author": "The journey of coding",
+        "coverImage": "http://t3.gstatic.com/images?q=tbn:ANd9GcQBMNA8A19vQpNY4bkgadsLhiRUFqBKwKAA6ANrw8VEtOiPrYQJ",
+        "price": "R320"
+    }
+];
 const resolvers = {
     Query: {
-        books: async () => {
-            const res = await axios.get("https://my-json-server.typicode.com/dmitrijt9/book-api-mock/books");
-            return res.data;
+        books: () => books,
+        bookById: (parent, args, contextValue, info) => {
+            return books.find(book => book.id == args.id);
         }
     },
+    Mutation: {
+        addBook: (parent, { book }, contectValue, info) => {
+            book.id = books.length + 1;
+            books.push(book);
+            return book;
+        }
+    }
 };
-// The ApolloServer constructor requires two parameters: your schema
-// definition and your set of resolvers.
 const server = new ApolloServer({
     typeDefs,
     resolvers,
 });
-// Passing an ApolloServer instance to the `startStandaloneServer` function:
-//  1. creates an Express app
-//  2. installs your ApolloServer instance as middleware
-//  3. prepares your app to handle incoming requests
 const { url } = await startStandaloneServer(server, {
     listen: { port: 4000 },
 });
